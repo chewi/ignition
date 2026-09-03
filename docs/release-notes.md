@@ -10,6 +10,8 @@ nav_order: 9
 
 ### Features
 
+- Add support for the `file` URL scheme, which reads files from local files at the given path.
+
 ### Changes
 
 ### Bug fixes
