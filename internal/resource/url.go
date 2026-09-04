@@ -35,6 +35,7 @@ import (
 
 	"cloud.google.com/go/compute/metadata"
 	configErrors "github.com/coreos/ignition/v2/config/shared/errors"
+	"github.com/coreos/ignition/v2/internal/distro"
 	"github.com/coreos/ignition/v2/internal/log"
 	"github.com/coreos/ignition/v2/internal/util"
 	"github.com/coreos/vcontext/report"
@@ -185,6 +186,11 @@ func (f *Fetcher) FetchToBuffer(u url.URL, opts FetchOptions) ([]byte, error) {
 		err = f.fetchFromGCS(u, dest, opts)
 	case "file":
 		err = f.fetchFromFile(u.Path, dest, opts)
+	case "oem":
+		if !distro.OEMFetch() {
+			return nil, ErrSchemeUnsupported
+		}
+		err = f.fetchFromFile(filepath.Join("/oem", u.Path), dest, opts)
 	case "":
 		return nil, nil
 	default:
@@ -255,6 +261,11 @@ func (f *Fetcher) Fetch(u url.URL, dest *os.File, opts FetchOptions) error {
 		return f.fetchFromGCS(u, dest, opts)
 	case "file":
 		return f.fetchFromFile(u.Path, dest, opts)
+	case "oem":
+		if !distro.OEMFetch() {
+			return ErrSchemeUnsupported
+		}
+		return f.fetchFromFile(filepath.Join("/oem", u.Path), dest, opts)
 	case "":
 		return nil
 	default:

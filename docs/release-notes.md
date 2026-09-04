@@ -11,6 +11,7 @@ nav_order: 9
 ### Features
 
 - Add support for the `file` URL scheme, which reads files from local files at the given path.
+- Add support for the `oem` URL scheme, which reads files from the local `/oem` directory (disabled by default; enabled by distributors via a build flag).
 
 ### Changes
 
